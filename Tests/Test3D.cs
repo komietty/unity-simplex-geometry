@@ -19,8 +19,10 @@ namespace kmty.geom.d3.test {
                 new f3(1, 0, 0),
                 new f3(0, 1, 0),
                 new f3(0, 0, 1),
+                new f3(1, 1, 1),
             };
             var c = new Convex(sample1);
+            c.Expand();
             Assert.IsTrue(c.Contains(new f3(0.1f, 0.1f, 0.1f)));
             Assert.IsTrue(c.Contains(new f3(0, 0, 0)));
             Assert.IsTrue(c.Contains(new f3(1, 0, 0)));
@@ -30,9 +32,11 @@ namespace kmty.geom.d3.test {
         }
 
 
+        // 57sec
+        //[Test, Repeat(5)]
         [Test]
         public void ConvexTestRandom() {
-            var points = Enumerable.Repeat(0, 200).Select(_ => (f3)UR.insideUnitSphere).ToList();
+            var points = Enumerable.Repeat(0, 100).Select(_ => (f3)UR.insideUnitSphere).ToList();
             var convex = new Convex(points);
             convex.ExpandLoop();
 
@@ -43,9 +47,12 @@ namespace kmty.geom.d3.test {
                 if (!f) break;
             }
 
-            foreach (var n in convex.nodes) {
-                Assert.IsTrue(n.neighbors.Count == 3);
-            }
+            //foreach (var n in convex.nodes) {
+            //    foreach (var nei in n.neighbors) {
+            //    //foreach (var nei in n.neibs) {
+            //        Assert.IsTrue(nei != null);
+            //    }
+            //}
 
             foreach (var p in points) {
                 Assert.IsTrue(convex.Contains(p));
